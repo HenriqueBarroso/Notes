@@ -1,3 +1,4 @@
+
 # Kotlin notes
 
 ## Introduction
@@ -87,7 +88,7 @@ class Person(val name: String) {
 
 Some functions can be used as operators.
 
-```Kotlin
+```kotlin
 operator fun Int.times(str: String) = str.repeat(this)
 println(2 * "Bye ") // "Bye Bye"
 
@@ -244,3 +245,163 @@ fun main() {
     person2.sayHello()  
 }
 ```
+
+## Control Flow
+
+
+### When
+Instead of the normal `where`, kotlin uses `when`.
+
+#### When statement
+
+```kotlin
+fun main() {  
+    cases("Hello")  // "Greeting"
+    cases(1)  		// "One"
+    cases(0L)  		// "Long"
+    cases(MyClass())  // "Not a string"
+    cases("hello")   // "Unknown"
+}  
+  
+fun cases(obj: Any) {  
+    when (obj) {  
+        1 -> println("One")  
+        "Hello" -> println("Greeting")  
+        is Long -> println("Long")  
+        !is String -> println("Not a string")  
+        else -> println("Unknown")  
+    }  
+}  
+  
+class MyClass
+```
+
+#### When expression
+
+```kotlin
+fun main() {  
+    println(whenAssign("Hello"))  	// 1
+    println(whenAssign(3.4))  		// 42
+    println(whenAssign(1))  		// "One"
+    println(whenAssign(MyClass()))  // 42
+}  
+  
+fun whenAssign(obj: Any): Any {  
+    var result = when (obj) {  
+        1 -> "One"  
+	   "Hello" -> 1  
+	   is Long -> false  
+	  else -> 42  
+  }  
+  
+  return result  
+}  
+  
+class MyClass
+```
+
+
+### Loops
+
+#### `for` loop
+
+```kotlin
+val cakes = listOf("carrot", "cheese", "chocolate")  
+  
+for (cake in cakes) {  
+    println("Yummy, it's a $cake cake!")  
+}
+```
+#### `while` and `do-while`
+
+```kotlin
+fun eatACake() = println("Eat a Cake")  
+fun bakeACake() = println("Bake a Cake")  
+  
+fun main() {  
+  var cakesEaten = 0  
+  var cakesBaked = 0  
+  
+  while (cakesEaten < 5) {                    // 1  
+	    eatACake()  
+        cakesEaten ++  
+    }  
+  
+    do {                                        // 2  
+	    bakeACake()  
+        cakesBaked++  
+    } while (cakesBaked < cakesEaten)  
+  
+}
+```
+
+### Iterators
+
+Iterators can be implemented in classes by using the `iterator` operator in them.
+
+```kotlin
+class Animal(val name: String)  
+  
+class Zoo(val animals: List<Animal>) {  
+    operator fun iterator(): Iterator<Animal> {  
+        return animals.iterator()  
+    }  
+}  
+  
+fun main() {  
+  
+    val zoo = Zoo(listOf(Animal("Zebra"), Animal("Lion")))  
+  
+    for (animal in zoo) {  
+        println("Watch out, it's a ${animal.name}")  
+    }  
+  
+}
+```
+
+### Ranges
+
+Ranges can be used in `for` loops
+
+```kotlin
+  
+// iterates over a range from 0 - 3 (inclusive)  
+for (i in 0..3) print(i)  
+  
+// iterates from 2 - 8 with 2 increments  
+for (i in 2..8 step 2) print(i)  
+  
+// iterates over a range in reverse order  
+for (i in 3 downTo 0) print(i)  
+  
+// chars are also supported  
+for (c in 'a'..'d') print(c)  
+  
+// also supported reverse and step  
+for (c in 'z' downTo 's' step 2) print(c)
+```
+
+but they can be also very useful in `if` statements
+
+```kotlin
+val x = 2  
+if (x in 1..5) print ("x is in range")  
+  
+if (x !in 6..10) print("xis not in range from 6 to 10")
+```
+
+### Equality checks
+
+Kotlin uses ``==`` for structural comparison and `===` for referential comparison.
+
+As an eg: `a == b` is translated in Kotlin into `if(a == null) b == null else a.equals(b)`
+
+```kotlin
+val authors = setOf("Shakespeare", "Hemingway", "Twain")
+val writers = setOf("Twain", "Shakespeare", "Hemingway")
+
+println(authors == writers)   // 1
+println(authors === writers)  // 2
+```
+1. returns `true` because `author.equals(writers)` and `Sets` ignore element order.
+2. returns `false` because they are distinct references.
