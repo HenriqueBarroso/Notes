@@ -64,7 +64,7 @@ Some rules are required:
 - They cannot have a default value and not accept variable number or arguments
 - They must have a single parameter 
 
-```Kotlin
+```kotlin
 fun main() {
 	infix fun Int.plus(value: Int) = this + value
 	println(1 plus 2)
@@ -349,9 +349,7 @@ class Zoo(val animals: List<Animal>) {
 }  
   
 fun main() {  
-  
     val zoo = Zoo(listOf(Animal("Zebra"), Animal("Lion")))  
-  
     for (animal in zoo) {  
         println("Watch out, it's a ${animal.name}")  
     }  
@@ -405,3 +403,119 @@ println(authors === writers)  // 2
 ```
 1. returns `true` because `author.equals(writers)` and `Sets` ignore element order.
 2. returns `false` because they are distinct references.
+
+
+
+## Special Classes
+
+### Data Classes
+
+Data classes makes it easy to create classes that are used to store values (Entities, DTOs, etc..). They are provided with methods that help copying, copying and using in instances in collections.
+
+```kotlin
+data class User(val name: String, val id: Int)
+
+val user1 = User("Anna", 1)
+```
+
+We can easily view the string representation by printing it as a string.
+
+```kotlin
+println(user1) // same as user1.toString() prints: User(name=Anna, id=1)
+```
+
+
+We can use `copy` to automatically instantiate another class with the same parameters
+```kotlin
+val user2 = user1.copy() // New instance with the same data
+
+val user3 = user1.copy(id = 4) // We can change the values
+```
+Data classes also provided an auto-generated methods `componentN()` to get values in the order of the declaration
+
+```kotlin
+user1.component1() // Anna
+user1.component2() // 1
+```
+
+### Enum classes
+
+Enum classes are used to represent a finite set of distinct values. Such as directions, statuses, modes, etc..
+
+```kotlin
+enum class State {
+	IDLE, RUNNING, FINISHED
+}
+
+val state = State.RUNNING
+```
+Enums can also contains methods like other classes.
+
+```kotlin
+enum class Color(val rgb: Int) {  
+    RED(0xFF0000),  
+    GREEN(0x00FF00),  
+    BLUE(0x0000FF),  
+    YELLOW(0xFFFF00);  
+  
+    fun containsRed() = (this.rgb and 0xFF0000 != 0)  
+}  
+  
+val color = Color.YELLOW  
+color.containsRed() // false
+```
+
+### Sealed classes
+
+Sealed classes lets us restrict the inheritance of it. Once we declared a `sealed` class, it can only be subclassed from inside the same file where the `sealed` class was declared.
+
+```kotlin
+sealed class Vehicle(val wheels: Int)  
+
+class Car(val brand: String): Vehicle(4) // subclassing from the same file
+```
+
+### Object keyword
+
+#### Object expression
+In Kotlin we can create anonymous instances, that have no particular class.
+This is also useful when trying to create **Singleton**  pattern. It uses no class, no constructor and it's `lazy`. This means it will only be created when accessed, otherwise it will never be created.
+
+```kotlin
+val myHouse = object {  
+  var address: String = "Vienna"  
+  var rooms: Int = 3  
+  var hasGarden: Boolean = false  
+} 
+println(myHouse.address) // "Vienna"
+```
+
+#### Object declaration
+
+We can also use it as a declaration. It isn't an expression and can't be used in a variable assignment. Can only be used to access it's members directly.
+
+```kotlin
+object Home {  
+    fun openDoor(passcode: String) {  
+        println("Opening front doo with code $passcode")  
+    }  
+}
+
+Home.openDoor("A4F277") // This is when the object is created and method called
+```
+
+#### Companion Objects
+
+A companion object inside a class is like `static` using methods. Notice that it's not possible for companion objects to access the class methods/parameters.
+
+```kotlin
+class Person(var name: String) {  
+    companion object Job {  
+        fun getJobName(jobName: String) {  
+            println("This person got a job as $jobName")  
+        }  
+    }  
+}
+
+Person.getJobName("Tester")
+```
