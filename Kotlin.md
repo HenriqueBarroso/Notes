@@ -519,3 +519,105 @@ class Person(var name: String) {
 
 Person.getJobName("Tester")
 ```
+
+
+## Functional
+
+### High-Order Function
+
+#### Taking function as parameters
+A high order-function is a function that takes another function as a parameter and/or returns another function.
+
+```kotlin
+fun calculate(x: Int, y: Int, operation: (Int, Int) -> Int): Int {  
+    return operation(x, y)  
+}  
+  
+fun sum(x: Int, y: Int) = x + y  
+  
+fun main() {  
+  
+    val sumResult = calculate(4, 5, ::sum)  
+    val mulResult = calculate(4, 5) { a, b -> a * b }  
+  
+    println("sumResult $sumResult, mulResult $mulResult")  
+}
+```
+
+We use `::<function name>` to let Kotlin know we are passing a function reference by its name.
+
+Or we can also pass as lambda `{ ... -> ...} `
+
+#### Returning functions
+
+```kotlin
+fun operation(): (Int) -> Int {  
+    return ::square  
+}  
+  
+fun square(x: Int) = x * x  
+  
+  
+fun main() {  
+    val func = operation() // func becomes the square()  
+    println(func(2))  // same as square(2)
+}
+```
+
+### Lambda Functions
+
+Five different ways of the declaring lambdas.
+
+```kotlin
+fun main() {  
+  
+    val upperCase1: (String) -> String = { str: String -> str.toUpperCase() }  
+  
+    val upperCase2: (String) -> String = { str -> str.toUpperCase() }  
+  
+    val upperCase3 = { str: String -> str.toUpperCase() }  
+  
+    val upperCase4: (String) -> String = { it.toUpperCase() }  
+  
+    val upperCase5: (String) -> String = String::toUpperCase  
+  
+    println(upperCase1("hello"))  
+    println(upperCase2("hello"))  
+    println(upperCase3("hello"))  
+    println(upperCase4("hello"))  
+    println(upperCase5("hello"))  
+}
+```
+
+### Extension functions and properties
+
+In Kotlin it's possible add new members to a class using extensions. 
+
+There are two types of extensions:
+
+ * Extension functions
+ * Extension properties
+
+They are declared almost like any other `fun` with the difference that we need to specify which type we are extending.
+
+```kotlin
+data class Item(val name: String, val price: Float)  
+data class Order(val items: Collection<Item>)  
+  
+// Extension functions
+fun Order.maxPricedItemValue(): Float = this.items.maxBy { it.price }?.price ?: 0f  
+fun Order.maxPricedItemName() = this.items.maxBy { it.price }?.name ?: "NO_PRODUCT"  
+  
+// Extension property
+val Order.commaDelimitedItemNames: String  
+    get() = items.map { it.name  }.joinToString()  
+  
+fun main() {  
+  
+    val order = Order(listOf(Item("Bread", 25.0F), Item("Wine", 29.0F)))  
+  
+    println("Max priced item name: ${order.maxPricedItemName()}")  
+    println("Max priced item value: ${order.maxPricedItemValue()}")  
+    println("Items: ${order.commaDelimitedItemNames}")  
+}
+```
