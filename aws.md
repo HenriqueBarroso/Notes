@@ -30,7 +30,7 @@ AWS has 3 princing fundamentals:
 
 * **Compute**: Pay for compute time
 * **Storage**: Pay for data stored in the cloud
-* **Data Transfer OUT**: DData transfer IN is free (yay)
+* **Data Transfer OUT**: Data transfer IN is free (yay)
 
 ### AWS Cloud Overview
 
@@ -100,3 +100,74 @@ IAM Roles are used by AWS services to perfom actions on our behalf. They are sim
 * Use Access Keys for programmatic Access (CLI/SDK)
 * Audit permissions of your account with Credentials Report
 * NEVER SHARE IAM users & Access Keys
+
+
+## EC2 - Elastic Compute Cloud
+
+EC2 = Infrastructure as a Service
+
+It mainly consists in the capability of:
+* Renting virtual machines EC2
+* Storing data on virtual drives (EBS)
+* Distributing load across machines (ELB)
+* Scaling services with auto-scaling group (ASG)
+
+### Instances
+
+* AMIs a template that contains all software configuration.
+* When you restart an instance, the public ip will also probably change
+
+### Security Groups (like firewall)
+
+* Security groups control how the traffic is allowed into or out of our EC2 instances
+* Security groups only contain**allow** rules
+* Security groups rules can be reference by IP or by security group
+
+### EC2 Instance Roles
+
+When adding IAM Roles to an instance, it ALLOWS that instance to perform actions as it they where from an authorized user.
+
+* Never use `aws` credentials inside an instance . Reason being is that anyone who can access that instance can view the current installed credentials.
+
+### EC2 Instances Purchasing Options
+
+#### On-demand instances
+* For short workload predictable pricing
+* Pay for what you use
+* No long term commitment
+* Recommended for short-term and un-interrupted workloads, where we can't predict how the application will behave
+
+
+#### Reserved (MININIUM ON YEAR)
+* Reserved instances: long work loads
+* Convertible reserved instances: long workloads with flexibles instances
+* Schedule reserved instances: eg: Every Monday between 3 and 8pm
+* Up to 75% discount compared to on-demand
+* Reservation period: 1 year = + discount | 3 years = +++ discount
+* Purchasing options: no upfront | partial upfront = + | All upfront = ++ discount
+* Recommended for steady-state usage applications (eg: DB)
+
+#### Spot instances: short workloads
+* cheap, can lose instances (less reliable) almost 90% discount
+* Instances that you can "lose" at any point of time if our max price is less than the current spot price
+* Useful for:
+	* Batch jobs
+	* Data analysis
+	* Image processing
+	* Any distributed workloads
+	* Workloads with flexible start and end time
+* NOT good for:
+	* Critical jobs or databases
+
+#### Dedicated Hosts: book an entire physical server
+* Helps with compliance requirements
+* Reduce costs by allowing you to use your existing server-bound software licenses
+* Requires at least 3 year period reservation
+* More expensive
+
+
+#### EC2 Dedicated instances
+* Instances running on hardware that's dedicated to you
+* May share hardware with other instance in the same account
+* No control over instance placement (can move hardware after stop/start)
+
