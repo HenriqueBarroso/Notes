@@ -171,3 +171,34 @@ When adding IAM Roles to an instance, it ALLOWS that instance to perform actions
 * May share hardware with other instance in the same account
 * No control over instance placement (can move hardware after stop/start)
 
+## ELB & ASG (Elastic LB & Auto Scaling Groups)
+
+There are to kinds of scalability:
+ * Vertical Scalability
+ * Horizontal scalability (=elasticity)
+
+#### Scalability VS Elasticity (vs Agility)
+
+* Scalability: ability to accommodate a larger load by making the hardware stronger (scale up) or by adding nodes (scale out)
+
+* Elasticity: Once a system is scalable, elasticity means that there will be some "auto-scaling" so that the system can scale based on the load. This is "cloud-friendly": pay-per-use, match demand, optimize costs.
+
+* Agility: Ability to deploy new resources a click away.
+
+## ELB (Elastic Load Balancing)
+
+AWS offers 3 kinds of loads balancers:
+* Application Load Balancer (HTTP/ HTTPS only) - Layer 7
+* Network Load Balancer (ultra-high performance, allows for TCP) - Layer 4
+* Classic Load Balancer (Slow retiring) - Layer 4 & 7
+
+### Auto Scaling Groups (ASG)
+
+* It's a system that can scale out or scale in servers quickly depending on the load.
+* The goal of ASG is:
+	* Scale out (add ec2 instances) to match an increased load
+	* Scale in (remove ec2 instances) to match a decreased load
+	* Ensure we have a minimum and a maximum number of machines running
+	* Automatically register new instances to a load balancer
+	* Replace unhealthy instances
+
